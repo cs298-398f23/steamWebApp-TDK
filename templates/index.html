@@ -8,22 +8,30 @@
     <h1><Raw Data></h1>
     <div id="rawData"></div>
     <h1><Games></h1>
+        <form id='game' method="post">
+            <input type="text" name="gameName" placeholder="Game Name">
+            <input type="submit" value="Search">
+        </form>
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        fetch('/games')
-            .then(response => response.json())
-            .then(data => {
-                let games = data.games;
-                let gamesDiv = document.getElementById('games');
-                games.forEach(game => {
-                    let gameDiv = document.createElement('div');
-                    gameDiv.innerHTML = game.name;
-                    gamesDiv.appendChild(gameDiv);
-                });
-            });
+    // display form data onto webpage below submit button using price from flask
+    document.getElementById('game').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var gameName = document.getElementsByName('gameName')[0].value;
+        var xhr = new XMLHttpRequest();
+        var url = '/games/' + gameName;
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                var price = data['price'];
+                var gameData = '<p>' + gameName + ' is $' + price + '</p>';
+                document.getElementById('rawData').innerHTML = gameData;
+            }
+        };
+        xhr.send();
     });
-
 
 </script>
 </html>
