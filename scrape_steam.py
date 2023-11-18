@@ -17,7 +17,7 @@ def get_game_price(game_id):
 
 if __name__ == "__main__":
     r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-    game_name = "Stellaris"
+    game_name = "terraria"
     game_id = get_game_id(game_name)
     game_price = get_game_price(game_id)
     r.hset(game_name, mapping={
