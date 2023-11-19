@@ -26,7 +26,7 @@
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
                 var price = data['price'];
-                var gameData = '<p>' + gameName + ' is $' + price + '</p>';
+                var gameData = '<p>' + gameName + ' is ' + price + '</p>';
                 document.getElementById('rawData').innerHTML = gameData;
             }
         };
