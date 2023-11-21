@@ -25,8 +25,8 @@
         xhr.onload = function() {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
-                var price = data['price'];
-                var gameData = '<p>' + gameName + ' is ' + price + '</p>';
+                var steam_price = data['price'];
+                var gameData = '<p>' + gameName + ' is ' + steam_price + ' on the Steam store</p>';
                 document.getElementById('rawData').innerHTML = gameData;
             }
         };
