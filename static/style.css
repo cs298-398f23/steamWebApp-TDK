@@ -44,7 +44,7 @@ form#game input[type="submit"]:hover {
 }
 
 /* Styles for displaying results */
-div#rawData {
+div#rawData1 {
     margin-top: 20px;
     padding: 15px;
     background-color: #e9ecef;
@@ -53,7 +53,21 @@ div#rawData {
     color: #333;
 }
 
-div#rawData p {
+div#rawData1 p {
+    margin: 0;
+    font-size: 18px;
+}
+
+div#rawData2 {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    display: inline-block;
+    color: #333;
+}
+
+div#rawData2 p {
     margin: 0;
     font-size: 18px;
 }
