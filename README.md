@@ -16,12 +16,15 @@ Start the redis database to store the information.
 redis-server
 ```
 
-Run the scrape_steam.py file in order to store the steam prices in the redis databases.
+Run the add_games_to_redis.py file in order to store the steam game names in the redis databases.
 ```
-python3 scrape_steam.py
+python3 add_games_to_redis.py
 ```
 
-### scrape_steam.py
+### add_games_to_redis.py
 
-Takes a game name (must be exact) and gets the price of the game off of the steam library. It stores
-the price as a hash in the redis database. 
+Hits the Steam API and stores a reference string of game names to be used as verification for price calling
+
+### games_app.py
+
+Flask server that references steam prices and returns jsonified data to our front-end display
