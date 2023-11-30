@@ -1,1 +1,0 @@
-# Scrapes store listing prices for games from G2A
