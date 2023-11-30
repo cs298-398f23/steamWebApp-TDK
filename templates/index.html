@@ -6,13 +6,14 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
 </head>
 <body>
-    <h1><Raw Data></h1>
-    <div id="rawData"></div>
     <h1><Games></h1>
         <form id='game' method="post">
             <input type="text" name="gameName" placeholder="Game Name">
             <input type="submit" value="Search">
         </form>
+    <h1><Raw Data></h1>
+    <div id="rawData1"></div>
+    <div id="rawData2"></div>
 </body>
 <script>
     // display form data onto webpage below submit button using price from flask
@@ -28,7 +29,32 @@
                 var data = JSON.parse(xhr.responseText);
                 var steam_price = data['price'];
                 var gameData = '<p>' + gameName + ' is ' + steam_price + ' on the Steam store</p>';
-                document.getElementById('rawData').innerHTML = gameData;
+                document.getElementById('rawData1').innerHTML = gameData;
+            }
+        };
+        xhr.send();
+    });
+    // add news for the game searched from flask
+    document.getElementById('game').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var gameName = document.getElementsByName('gameName')[0].value;
+        var xhr = new XMLHttpRequest();
+        var url = '/gamedata/' + gameName;
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                var news = '<p>News for ' + gameName + '</p>';
+                document.getElementById('rawData2').innerHTML = news;
+                var newsList = document.createElement('ul');
+                document.getElementById('rawData2').appendChild(newsList);
+                for (var i = 0; i < data.length; i++) {
+                    var news = '<li>' + data[i] + '</li>';
+                    newsList.innerHTML += news;
+                    var line_break = document.createElement('br');
+                    newsList.appendChild(line_break);
+                }
             }
         };
         xhr.send();
