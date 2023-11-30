@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Games Comparison</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1><Raw Data></h1>
@@ -25,8 +26,8 @@
         xhr.onload = function() {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
-                var price = data['price'];
-                var gameData = '<p>' + gameName + ' is ' + price + '</p>';
+                var steam_price = data['price'];
+                var gameData = '<p>' + gameName + ' is ' + steam_price + ' on the Steam store</p>';
                 document.getElementById('rawData').innerHTML = gameData;
             }
         };
