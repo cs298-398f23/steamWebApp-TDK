@@ -23,24 +23,12 @@ def get_game(name):
 @app.route('/gamedata/<name>', methods=['GET', 'POST'])
 def display_game_data_from_steam(name):
     target_id = find_target_game_id(name)
-    url = ' http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=' + str(target_id) + '&count=3&maxlength=500&format=json'
+    url = 'http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=' + str(target_id) + '&count=3&maxlength=500&format=json'
     response = requests.get(url)
     news_list = []
     for news in response.json()['appnews']['newsitems']:
         news_list.append(news['contents'])
     return news_list
-
-
-def get_redis():
-    return redis.Redis(host='localhost', port=6379, decode_responses=True)
-
-
-def parse_games(games):
-    game_list = []
-    games = games.split(",")
-    for game in games:
-        game_list.append(game.strip().strip("'").strip('"'))
-    return game_list
 
 
 def get_game_price(game_id):
@@ -58,7 +46,7 @@ def get_app_ids_for_steam_games():
 
 
 def find_target_game_id(game_name):
-    if game_name in game_list:
+    if game_name in game_names:
         target_id = ""
         for id in app_ids:
             if id["name"] == game_name:
@@ -70,8 +58,8 @@ def find_target_game_id(game_name):
 
 
 if __name__ == "__main__":
-    r = get_redis()
-    game_names = r.get("games")
-    game_list = parse_games(game_names)
     app_ids = get_app_ids_for_steam_games()
+    game_names = []
+    for id in app_ids:
+        game_names.append(id["name"])
     app.run(debug=True, port=8000)
