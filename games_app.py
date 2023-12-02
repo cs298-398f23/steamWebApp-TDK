@@ -1,15 +1,59 @@
 # Flask server to display data from redis database
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from werkzeug.security import generate_password_hash, check_password_hash
 import redis
 import requests
-
+import secrets
+import os
 
 app = Flask(__name__)
+# Create a secret key for the session (to sign off on the cookies)
+app.secret_key = os.environ.get('SECRET_KEY') or secrets.token_hex(16)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html")
+
+# Basic registration and login system
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # Get user details from form
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Check if username already exists
+        if r.exists(f"user:{username}:password"):
+            return 'Username already exists'
+
+        # Hash the password
+        hashed_password = generate_password_hash(password)
+
+        # Save user in Redis
+        r.set(f"user:{username}:password", hashed_password)
+
+        # Redirect to login page after registration
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # Retrieve user password from Redis and validate
+        stored_password = r.get(f"user:{username}:password")
+        if stored_password and check_password_hash(stored_password, password):
+            session['username'] = username
+            return redirect(url_for('index'))  # Redirect to main page after login
+        else:
+            return 'Login Failed'
+
+    return render_template('login.html')
 
 
 @app.route('/games/<name>', methods=['GET', 'POST'])
