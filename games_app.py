@@ -74,6 +74,8 @@ def display_game_data_from_steam(name):
         news_list.append(news['contents'])
     return news_list
 
+def get_redis():
+    return redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 def get_game_price(game_id):
     params = {"appids": game_id, "cc": "us", "filters": "price_overview"}
@@ -102,6 +104,7 @@ def find_target_game_id(game_name):
 
 
 if __name__ == "__main__":
+    r = get_redis()
     app_ids = get_app_ids_for_steam_games()
     game_names = []
     for id in app_ids:
