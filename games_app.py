@@ -86,6 +86,11 @@ def display_game_data_from_steam(name):
         news_list.append(news['contents'])
     return news_list
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
 def get_redis():
     return redis.Redis(host='localhost', port=6379, decode_responses=True)
 
