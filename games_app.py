@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 import redis
 import requests
 import secrets
@@ -11,7 +12,18 @@ app = Flask(__name__)
 # Create a secret key for the session (to sign off on the cookies)
 app.secret_key = os.environ.get('SECRET_KEY') or secrets.token_hex(16)
 
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route("/", methods=["GET", "POST"])
+@login_required
 def index():
     return render_template("index.html")
 
@@ -76,6 +88,7 @@ def display_game_data_from_steam(name):
 
 def get_redis():
     return redis.Redis(host='localhost', port=6379, decode_responses=True)
+
 
 def get_game_price(game_id):
     params = {"appids": game_id, "cc": "us", "filters": "price_overview"}
