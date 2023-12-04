@@ -6,13 +6,17 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
 </head>
 <body>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
     <h1><Games></h1>
         <form id='game' method="post">
             <input type="text" name="gameName" placeholder="Game Name">
             <input type="submit" value="Search">
         </form>
     <h1><Raw Data></h1>
-    <div id="rawData1"></div>
+    <div id="rawData1"></div> 
     <div id="rawData2"></div>
 </body>
 <script>
