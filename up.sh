@@ -1,28 +1,35 @@
 #!/bin/bash
 
-# Install system packages
+# Install system packages if not already installed
 sudo yum update -y
 sudo yum install python3-pip git -y
 
-# Clone the GitHub repo
-git clone https://github.com/cs298-398f23/steamWebApp-TDK.git
+# Clone the GitHub repo if it doesn't already exist
+if [ ! -d "steamWebApp-TDK" ]; then
+    git clone https://github.com/cs298-398f23/steamWebApp-TDK.git
+fi
 cd steamWebApp-TDK/
 
-# Creates and activates a Python virtual environment
-python3 -m venv .venv
+# Create and activate a Python virtual environment if it doesn't exist
+if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+fi
 source .venv/bin/activate
 
-# Installs Python reqs
+# Install Python requirements if not already installed
 pip install -r requirements.txt
 pip install urllib3==1.26.6
 
-# Install additional system reqs
-sudo amazon-linux-extras install epel -y
-sudo amazon-linux-extras install redis6 -y
+# Check if EPEL and Redis are installed, install if they are not
+if ! sudo amazon-linux-extras list | grep -q epel; then
+    sudo amazon-linux-extras install epel -y
+fi
+if ! rpm -q redis; then
+    sudo amazon-linux-extras install redis6 -y
+fi
 
-# Starts the Redis-server
+# Start the Redis-server
 redis-server --daemonize yes
 
-# Runs the Python scripts
-python3 add_games_to_redis.py
+# Run the Python script
 python3 games_app.py
