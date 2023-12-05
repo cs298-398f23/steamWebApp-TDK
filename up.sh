@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Install system packages
-# sudo yum update -y
-# sudo yum install python3-pip git -y
+sudo yum update -y
+sudo yum install python3-pip git -y
 
 # Clone the GitHub repo
-# git clone https://github.com/cs298-398f23/steamWebApp-TDK.git
-# cd steamWebApp-TDK/
+git clone https://github.com/cs298-398f23/steamWebApp-TDK.git
+cd steamWebApp-TDK/
 
 # Creates and activates a Python virtual environment
 python3 -m venv .venv
