@@ -71,6 +71,37 @@ class FlaskTestCase(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn('Login', response.data.decode())
 
+    def test_favorites_without_login(self):
+        result = self.app.get('/favorites')
+
+        self.assertEqual(result.status_code, 302)
+        self.assertIn('/login', result.headers['Location'])
+
+    def test_favorites_with_login(self):
+        with self.app as client:
+            with client.session_transaction() as sess:
+                sess['username'] = 'testuser'
+
+            # While user is in session, we can test the favorites page
+            result = client.get('/favorites')
+            self.assertEqual(result.status_code, 200)
+
+    #def test_add_favorite_with_login(self):
+        #with self.app as client:
+            #with client.session_transaction() as sess:
+                #sess['username'] = 'testuser'
+
+            # While user is in session, we can test the favorites page
+            #result = client.get('/add_favorite')
+            #self.assertEqual(result.status_code, 200)
+
+    #def test_add_favorite_without_login(self):
+
+        #result = self.app.get('/add_favorite')
+
+        #self.assertEqual(result.status_code, 302)
+        #self.assertIn('/login', result.headers['Location'])
+
 if __name__ == '__main__':
     unittest.main()
 
