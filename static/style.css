@@ -69,7 +69,7 @@ div#rawData1 {
     padding: 15px;
     background-color: #e9ecef;
     border-radius: 5px;
-    display: inline-block;
+    display: none;
     color: #333;
 }
 
@@ -83,11 +83,25 @@ div#rawData2 {
     padding: 15px;
     background-color: #e9ecef;
     border-radius: 5px;
-    display: inline-block;
+    display: none;
     color: #333;
 }
 
 div#rawData2 p {
+    margin: 0;
+    font-size: 18px;
+}
+
+input#favoriteButton {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    display: none;
+    color: #333;
+}
+
+input#favoriteButton p {
     margin: 0;
     font-size: 18px;
 }

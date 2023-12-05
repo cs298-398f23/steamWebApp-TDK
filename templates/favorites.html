@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Favorites</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/favorites">Favorites</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <h2>Games</h2>
+    <table id="favoritesTable">
+        <thead>
+          <tr>
+            <th>Game</th>
+            <th>Steam ID</th>
+            <th>Price</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    
+      <script>
+        showFavorites();
+        function showFavorites() {
+          var xhr = new XMLHttpRequest();
+          var url = '/get_favorites';
+          xhr.open('GET', url, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                console.log(data);
+                var table = document.getElementById('favoritesTable');
+                for (let i = 0; i < data.length; i++) {
+                    var newRow = table.insertRow(table.rows.length);
+                    var gameCell = newRow.insertCell(0);
+                    var steamIdCell = newRow.insertCell(1);
+                    var priceCell = newRow.insertCell(2);
+                    var removeCell = newRow.insertCell(3);
+                    var gameName = data[i];
+                    gameCell.innerHTML = gameName;
+                    getIdAndPrice(gameName, steamIdCell, priceCell);
+                    removeCell.innerHTML = '<button onclick="removeRow(this)">Remove</button>';
+                }
+            }
+          };
+          xhr.send();
+        }
+
+        function getIdAndPrice(gameName, steamIdCell, priceCell) {
+            var xhr = new XMLHttpRequest();
+            var url = '/get_steamID/' + gameName;
+            xhr.open('GET', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+              if (xhr.status === 200) {
+                  var data = JSON.parse(xhr.responseText);
+                  steamIdCell.innerHTML = data;
+                  getPrice(data, priceCell);
+              }
+            };
+            xhr.send();
+        }
+
+        function getPrice(steamID, priceCell) {
+            var xhr = new XMLHttpRequest();
+            var url = '/get_price/' + steamID;
+            xhr.open('GET', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+              if (xhr.status === 200) {
+                  var data = xhr.responseText;
+                  priceCell.innerHTML = data;
+              }
+            };
+            xhr.send();
+        }
+
+        function removeRow(button) {
+          // Get the reference to the row and remove it
+          var xhr = new XMLHttpRequest();
+          var url = '/remove_favorite/' + "Stellaris";
+          xhr.open('POST', url, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+                var row = button.parentNode.parentNode;
+                row.parentNode.removeChild(row);
+            }; 
+          };
+          xhr.send();
+        }
+      </script>
+    
+    </body>
+    </html>
+</body>
+</html>
