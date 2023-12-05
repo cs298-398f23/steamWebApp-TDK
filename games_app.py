@@ -7,6 +7,7 @@ import redis
 import requests
 import secrets
 import os
+import json
 
 app = Flask(__name__)
 # Create a secret key for the session (to sign off on the cookies)
@@ -91,23 +92,56 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
-def get_redis():
-    return redis.Redis(host='localhost', port=6379, decode_responses=True)
+@app.route('/add_favorite/<name>', methods=['POST'])
+def add_favorite(name):
+    r.sadd(f"user:{session['username']}:favorites", str(name))
+    return "Added to favorites"
 
+@app.route('/remove_favorite/<name>', methods=['POST'])
+def remove_favorite(name):
+    r.srem(f"user:{session['username']}:favorites", name)
+    return "Removed from favorites"
 
+@app.route('/favorites', methods=['GET'])
+@login_required
+def go_to_favorites():
+    return render_template("favorites.html")
+
+@app.route('/get_favorites', methods=['GET'])
+def get_favorites():
+    favorites = r.smembers(f"user:{session['username']}:favorites")
+    fav_list = []
+    for favorite in favorites:
+        fav_list.append(favorite)
+    return fav_list
+
+@app.route('/get_price/<game_id>', methods=['GET'])
 def get_game_price(game_id):
-    params = {"appids": game_id, "cc": "us", "filters": "price_overview"}
+    params = {"appids": int(game_id), "cc": "us", "filters": "price_overview"}
     request = requests.get("http://store.steampowered.com/api/appdetails?appids=", params=params)
     json = request.json()
     return json[str(game_id)]["data"]["price_overview"]["final_formatted"]
 
+@app.route('/get_steamID/<game_name>', methods=['GET'])  
+def find_game_id(game_name):
+    if game_name in game_names:
+        target_id = ""
+        for id in app_ids:
+            if id["name"] == game_name:
+                target_id = id["appid"]
+                break
+        return str(target_id)
+    else:
+        return "Game not found"
+    
+def get_redis():
+    return redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 def get_app_ids_for_steam_games():
     params = {"l": "english", "cc": "us"}
     request = requests.get("http://api.steampowered.com/ISteamApps/GetAppList/v0002/", params=params)
     json = request.json()
     return json["applist"]["apps"]
-
 
 def find_target_game_id(game_name):
     if game_name in game_names:
@@ -119,7 +153,6 @@ def find_target_game_id(game_name):
         return target_id
     else:
         return "Game not found"
-
 
 if __name__ == "__main__":
     r = get_redis()
