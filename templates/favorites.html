@@ -85,7 +85,7 @@
         function removeRow(button) {
           // Get the reference to the row and remove it
           var xhr = new XMLHttpRequest();
-          var url = '/remove_favorite/' + "Stellaris";
+          var url = '/remove_favorite/' + button.parentNode.parentNode.cells[0].innerHTML;
           xhr.open('POST', url, true);
           xhr.setRequestHeader('Content-Type', 'application/json');
           xhr.onload = function() {
