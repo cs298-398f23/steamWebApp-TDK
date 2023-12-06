@@ -120,6 +120,8 @@ def get_game_price(game_id):
     params = {"appids": int(game_id), "cc": "us", "filters": "price_overview"}
     request = requests.get("http://store.steampowered.com/api/appdetails?appids=", params=params)
     json = request.json()
+    if json[str(game_id)]["data"] == []:
+        return "$0.00"
     return json[str(game_id)]["data"]["price_overview"]["final_formatted"]
 
 @app.route('/get_steamID/<game_name>', methods=['GET'])  
@@ -133,6 +135,13 @@ def find_game_id(game_name):
         return str(target_id)
     else:
         return "Game not found"
+    
+@app.route('/check_favorite/<game_name>', methods=['GET'])
+def check_favorite(game_name):
+    if r.sismember(f"user:{session['username']}:favorites", game_name):
+        return "True"
+    else:
+        return "False"
     
 def get_redis():
     return redis.Redis(host='localhost', port=6379, decode_responses=True)
