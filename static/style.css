@@ -1,9 +1,14 @@
+html {
+    background-color: #abcff5;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f5f5f5;
     text-align: center;
+    background-color: #abcff5;
 }
 
 h1 {
@@ -38,6 +43,7 @@ form#game {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: inline-block;
+    background-color: #c7c5c5;
 }
 
 /* Styles for input fields and submit button */
@@ -98,10 +104,37 @@ input#favoriteButton {
     background-color: #e9ecef;
     border-radius: 5px;
     display: none;
-    color: #333;
+    color: white;
+    background-color: #007bff;
 }
 
 input#favoriteButton p {
     margin: 0;
     font-size: 18px;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  th, td {
+    border: 2px solid #000000;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #969696;
+  }
+
+ tr {
+    background-color: #c7c5c5;
+}
+  
+  tr:hover {
+    background-color: #f2f2f2;
+  }
