@@ -1,0 +1,28 @@
+# This workflow will install Python dependencies and run tests for the repo
+
+name: Python CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9.7"
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+        
+    - name: Test with unit test
+      run: python -m unittest discover -s . -p "test_*.py"
