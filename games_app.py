@@ -13,7 +13,6 @@ app = Flask(__name__)
 # Create a secret key for the session (to sign off on the cookies)
 app.secret_key = os.environ.get('SECRET_KEY') or secrets.token_hex(16)
 
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -163,10 +162,11 @@ def find_target_game_id(game_name):
     else:
         return "Game not found"
 
+
 if __name__ == "__main__":
     r = get_redis()
     app_ids = get_app_ids_for_steam_games()
     game_names = []
     for id in app_ids:
         game_names.append(id["name"])
-    app.run(debug=True, port=8000)
+    app.run(debug=False, port=8000)
