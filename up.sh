@@ -32,4 +32,5 @@ fi
 redis-server --daemonize yes
 
 # Run the flask server using gunicorn
-python3 games_app.py
+gunicorn -w 4 -b 0.0.0.0:8000 "games_app:app"
+
