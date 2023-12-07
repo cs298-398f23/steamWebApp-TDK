@@ -9,20 +9,6 @@ import secrets
 import os
 import json
 
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-
-def get_app_ids_for_steam_games():
-    params = {"l": "english", "cc": "us"}
-    request = requests.get("http://api.steampowered.com/ISteamApps/GetAppList/v0002/", params=params)
-    json = request.json()
-    return json["applist"]["apps"]
-
-app_ids = get_app_ids_for_steam_games()
-game_names = []
-for id in app_ids:
-    game_names.append(id["name"])
-
-
 def create_app():
     app = Flask(__name__)
     # Create a secret key for the session (to sign off on the cookies)
@@ -184,9 +170,10 @@ def launch():
     return create_app()
 
 if __name__ == "__main__":
+    r = get_redis()
     app = create_app()
     app_ids = get_app_ids_for_steam_games()
     game_names = []
     for id in app_ids:
         game_names.append(id["name"])
-    app.run(debug=True, port=8000, host='0.0.0.0')
+    app.run(debug=True, port=80, host='0.0.0.0')
