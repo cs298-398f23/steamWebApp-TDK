@@ -12,6 +12,20 @@ import json
 app = Flask(__name__)
 # Create a secret key for the session (to sign off on the cookies)
 app.secret_key = os.environ.get('SECRET_KEY') or secrets.token_hex(16)
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+def get_app_ids_for_steam_games():
+    params = {"l": "english", "cc": "us"}
+    request = requests.get("http://api.steampowered.com/ISteamApps/GetAppList/v0002/", params=params)
+    json = request.json()
+    return json["applist"]["apps"]
+
+app_ids = get_app_ids_for_steam_games()
+game_names = []
+for id in app_ids:
+    game_names.append(id["name"])
+
+
 
 
 def login_required(f):
@@ -163,8 +177,12 @@ def find_target_game_id(game_name):
     else:
         return "Game not found"
 
+# returns flask app for gunicorn to launch with
+def launch():
+    return app
+
+
 if __name__ == "__main__":
-    r = get_redis()
     app_ids = get_app_ids_for_steam_games()
     game_names = []
     for id in app_ids:
