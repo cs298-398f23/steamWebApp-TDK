@@ -31,5 +31,5 @@ fi
 # Start the Redis-server
 redis-server --daemonize yes
 
-# Run the Python script
+# Run the flask server using gunicorn
 python3 games_app.py
