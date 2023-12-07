@@ -1,15 +1,20 @@
-from games_app import app, get_redis
+from games_app import create_app, get_redis
 from werkzeug.security import generate_password_hash
 import unittest
 
 class FlaskTestCase(unittest.TestCase):
 
     def setUp(self):
-        # Creates a test client
+        # Create an instance of the app using the application factory
+        app = create_app()
+
+        # Configure the app for testing
+        app.config['TESTING'] = True
+
+        # Create a test client using the Flask application configured for testing
         self.app = app.test_client()
-        # Propagates the exceptions to the test client
-        self.app.testing = True
-        # Set up a test Redis connection
+
+        # Set up a test Redis connection (if necessary)
         self.redis = get_redis()
 
     def test_index_without_login(self):
