@@ -31,5 +31,5 @@ fi
 # Start the Redis-server
 redis-server --daemonize yes
 
-# Run the flask server using gunicorn
-.venv/bin/gunicorn --chdir . -w 4 -b 0.0.0.0:8000 "games_app:app"
+# Run the flask 
+sudo /home/ec2-user/steamWebApp-TDK/.venv/bin/python3 /home/ec2-user/steamWebApp-TDK/games_app.py
