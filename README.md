@@ -28,3 +28,21 @@ Open a browser and connect to the server using the public IP address of the EC2 
 
 
 ### Host locally
+
+Clone the repo, start up a virtual environment, and install the requirements.
+
+```
+python3 -m .venv venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Run the games_app.py file.
+
+`python3 games_app.py`
+
+Open a browser and connect to the server using the home IP address and port 8000.
+
+`127.0.0.1:8000`
+
+### Testing
