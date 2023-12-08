@@ -8,11 +8,23 @@ credentials in redis so you can login to get your favorites list.
 ### Host on EC2
 
 Start up an EC2 instance using Linux AMI 2 and make sure your security group allows HTTP traffic. 
-Create a .env file with 2 variables
+Clone this repo locally and create a .env file with 2 variables
 
-`
+```
 INSTANCE_ID=<EC2 Instance ID>
 public_ip=<EC2 Public IP>
-`
+```
+Make sure you have the aws package installed.
+
+`pip install aws`
+
+Change the path to your .pem key in lines 16 and 19 of the UpExp.sh and then run the UpExp.sh file to ssh into the EC2 instance and remotetly run the Up.sh file.
+
+`sh UpExp.sh`
+
+Open a browser and connect to the server using the public IP address of the EC2 and port 80.
+
+`<Public IP>:80`
+
 
 ### Host locally
